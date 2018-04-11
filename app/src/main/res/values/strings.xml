@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Pickup Scheduler</string>
+    <string name="done_with_group">Done with group</string>
+    <string name="get_directions">Get Directions</string>
+</resources>
