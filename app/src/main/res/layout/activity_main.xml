@@ -43,7 +43,7 @@
         app:layout_constraintStart_toEndOf="@+id/buttonCustomers" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewCustomerCount"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"

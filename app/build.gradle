@@ -8,7 +8,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.ibisrecycling.lars.pickupscheduler"
-        minSdkVersion 24
+        minSdkVersion 25
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -37,5 +37,5 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-maps:12.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation   'com.thoughtbot:expandablerecyclerview:1.3'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }

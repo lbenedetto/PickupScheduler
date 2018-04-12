@@ -2,4 +2,5 @@
     <string name="app_name">Pickup Scheduler</string>
     <string name="done_with_group">Done with group</string>
     <string name="get_directions">Get Directions</string>
+    <string name="welcome_message">We have %1$d customer%2$s on the selected day!</string>
 </resources>
