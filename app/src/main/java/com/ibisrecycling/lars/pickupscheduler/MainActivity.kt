@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 		})
 
 		findViewById<Button>(R.id.buttonCustomers).setOnClickListener({ v ->
-			startActivity(Intent(v.context, PickupsActivity::class.java))
+			startActivity(Intent(v.context, CustomerActivity::class.java))
 		})
 
 		customerManager = CustomerManager(this)

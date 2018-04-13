@@ -13,7 +13,7 @@ import java.util.*
 class PickupsActivity : AppCompatActivity() {
 	private lateinit var customerManager: CustomerManager
 	private lateinit var customers: Array<Customer>
-	private lateinit var customerGroups : Array<ArrayList<Customer>>
+	private var customerGroups = arrayOf<ArrayList<Customer>>()
 	private lateinit var description: TextView
 	private var currentGroupNum = 0
 
@@ -29,7 +29,7 @@ class PickupsActivity : AppCompatActivity() {
 		description = findViewById(R.id.textViewDescription)
 		//TODO: Load the map
 		customers = customerManager.todaysCustomers.toTypedArray()
-		customerGroups = generateGroups()
+		if (customers.isNotEmpty()) customerGroups = generateGroups()
 		initGroup()
 
 
@@ -43,13 +43,18 @@ class PickupsActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun initGroup(){
+	private fun initGroup() {
 		//TODO: Update the map
 		updateDescription()
 	}
 
 	private fun updateDescription() {
-		description.text = getString(R.string.customer_count, dayOfWeek(), customers.size, customerGroups[currentGroupNum].size)
+		val size =
+				if (customerGroups.isNotEmpty() && customerGroups.size > currentGroupNum)
+					customerGroups[currentGroupNum].size
+				else
+					0
+		description.text = getString(R.string.customer_count, dayOfWeek(), customers.size, size)
 	}
 
 	private fun dayOfWeek(): String {
