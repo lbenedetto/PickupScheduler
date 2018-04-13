@@ -5,7 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import java.util.*
 
-class CustomerManager(context: Context) {
+class CustomerManager(private val context: Context) {
 	private val key: String = "customers"
 	private val sharedPrefs: SharedPreferences = context.getSharedPreferences(key, MODE_PRIVATE)
 	private val allCustomers: ArrayList<Customer>? = null
@@ -16,7 +16,7 @@ class CustomerManager(context: Context) {
 			val customers = sharedPrefs.getStringSet(key, HashSet<String>())
 			val customerList = ArrayList<Customer>()
 			customers.forEach({ customer ->
-				customerList.add(Customer(customer))
+				customerList.add(Customer(customer, context))
 			})
 			return customerList
 		}

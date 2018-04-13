@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Pickup Scheduler</string>
-    <string name="done_with_group">Done with group</string>
-    <string name="get_directions">Get Directions</string>
-    <string name="welcome_message">We have %1$d customer%2$s on the selected day!</string>
+	<string name="app_name">Pickup Scheduler</string>
+	<string name="done_with_group">Done with group</string>
+	<string name="get_directions">Get Directions</string>
+	<string name="welcome_message">We have %1$d customer%2$s on the selected day!</string>
+	<string name="settings">Settings</string>
+	<string name="customer_count">Today is %1$s\nWe have %2$d customers remaining to service today\nThere are %3$d customers in this group</string>
 </resources>
