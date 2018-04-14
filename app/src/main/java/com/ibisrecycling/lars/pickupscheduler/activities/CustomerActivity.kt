@@ -1,25 +1,26 @@
-package com.ibisrecycling.lars.pickupscheduler
+package com.ibisrecycling.lars.pickupscheduler.activities
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.RadioGroup
+import android.widget.*
+import com.ibisrecycling.lars.pickupscheduler.CustomerListAdapter
+import com.ibisrecycling.lars.pickupscheduler.R
 import com.ibisrecycling.lars.pickupscheduler.utils.Customer
 import com.ibisrecycling.lars.pickupscheduler.utils.CustomerManager
 import java.util.*
 
 class CustomerActivity : AppCompatActivity() {
 	lateinit var customerManager: CustomerManager
+	lateinit var listView: ListView
+	lateinit var adapter: CustomerListAdapter
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_customer)
 		customerManager = CustomerManager(this)
+		listView = findViewById(R.id.listView)
+		adapter = CustomerListAdapter(customerManager.getAllCustomers())
+		listView.adapter = adapter
 
 		findViewById<Button>(R.id.buttonImport).setOnClickListener({
 			//TODO: Implement importing from PayWhirl
@@ -39,6 +40,7 @@ class CustomerActivity : AppCompatActivity() {
 						startDate = datePicker.getDate(),
 						context = this
 				))
+				adapter.notifyDataSetChanged()
 				dialog.dismiss()
 			})
 
@@ -46,11 +48,13 @@ class CustomerActivity : AppCompatActivity() {
 
 			dialog.show()
 		})
+
+
 	}
 
 	private fun DatePicker.getDate(): Date {
 		val c = Calendar.getInstance()
-		c.set(this.dayOfMonth, this.month, this.year)
+		c.set(this.year, this.month, this.dayOfMonth)
 		return c.time
 	}
 

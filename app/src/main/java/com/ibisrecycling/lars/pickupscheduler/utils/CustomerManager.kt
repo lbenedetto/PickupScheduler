@@ -3,6 +3,7 @@ package com.ibisrecycling.lars.pickupscheduler.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.ibisrecycling.lars.pickupscheduler.utils.DateConversions.Companion.getAsInt
 import java.util.*
 
 class CustomerManager(private val context: Context) {
@@ -43,6 +44,13 @@ class CustomerManager(private val context: Context) {
 		updated = true
 	}
 
+	private fun removeAllCustomers() {
+		sharedPrefs.edit()
+				.putStringSet(key, null)
+				.apply()
+		updated = true
+	}
+
 	fun addCustomer(customer: Customer) {
 		addCustomer(customer.toString())
 	}
@@ -67,12 +75,12 @@ class CustomerManager(private val context: Context) {
 		return customers
 	}
 
-//	fun Date.toInt(): Int = (this.year * 10000) + (this.month * 100) + this.day
-
-	fun getAllPickupDates(): HashSet<Date> {
-		var dates = HashSet<Date>()
-		getAllCustomers().forEach({
-			dates.addAll(it.getNextNPickupDates(12))
+	fun getAllPickupDates(min: Date, max: Date): HashSet<Date> {
+		val dates = HashSet<Date>()
+		getAllCustomers().forEach({ customer ->
+			customer.getNextNPickupDates(12).forEach({ date ->
+				if (getAsInt(date) >= getAsInt(min) && getAsInt(date) <= getAsInt(max)) dates.add(date)
+			})
 		})
 		return dates
 	}

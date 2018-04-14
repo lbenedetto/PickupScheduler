@@ -1,10 +1,11 @@
-package com.ibisrecycling.lars.pickupscheduler
+package com.ibisrecycling.lars.pickupscheduler.activities
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import com.ibisrecycling.lars.pickupscheduler.R
 import com.ibisrecycling.lars.pickupscheduler.utils.Customer
 import com.ibisrecycling.lars.pickupscheduler.utils.CustomerManager
 import com.squareup.timessquare.CalendarPickerView
@@ -14,7 +15,9 @@ class MainActivity : AppCompatActivity() {
 	private lateinit var customerManager: CustomerManager
 	private lateinit var MOTD: TextView
 	private lateinit var calendar: CalendarPickerView
-
+	companion object {
+		val maxDate = Date((Date().time) + (62 * Customer.daysToMillis))
+	}
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -33,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 		updateMOTD(Date())
 
 		calendar = findViewById(R.id.calendarView)
-		calendar.init(Date(), Date((Date().time) + (62 * Customer.daysToMillis))).withSelectedDate(Date())
+		calendar.init(Date(), maxDate).withSelectedDate(Date())
 		calendar.setOnDateSelectedListener(object : CalendarPickerView.OnDateSelectedListener {
 			override fun onDateSelected(date: Date) {
 				updateMOTD(date)
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
 			override fun onDateUnselected(date: Date?) {}
 		})
-		calendar.highlightDates(customerManager.getAllPickupDates())
+		calendar.highlightDates(customerManager.getAllPickupDates(Date(), maxDate))
 	}
 
 	private fun updateMOTD(date: Date) {

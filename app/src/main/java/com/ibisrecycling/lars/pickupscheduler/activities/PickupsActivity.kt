@@ -1,9 +1,10 @@
-package com.ibisrecycling.lars.pickupscheduler
+package com.ibisrecycling.lars.pickupscheduler.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
+import com.ibisrecycling.lars.pickupscheduler.R
 import com.ibisrecycling.lars.pickupscheduler.utils.BoundingBox
 import com.ibisrecycling.lars.pickupscheduler.utils.Customer
 import com.ibisrecycling.lars.pickupscheduler.utils.CustomerManager
@@ -68,7 +69,6 @@ class PickupsActivity : AppCompatActivity() {
 			else -> "Saturday"
 		}
 	}
-
 
 	/**
 	 * Implements K-Means algorithm to find clusters of customers of size GROUP_SIZE

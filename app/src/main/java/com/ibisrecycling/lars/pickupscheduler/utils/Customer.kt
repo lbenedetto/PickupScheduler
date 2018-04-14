@@ -3,22 +3,23 @@ package com.ibisrecycling.lars.pickupscheduler.utils
 import android.content.Context
 import android.location.Geocoder
 import android.widget.Toast
-import com.google.android.gms.maps.model.LatLng
+import com.ibisrecycling.lars.pickupscheduler.utils.DateConversions.Companion.getAsInt
+import com.ibisrecycling.lars.pickupscheduler.utils.DateConversions.Companion.getAsString
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class Customer(
 		val name: String,
-		private val address: String,
-		subscriptionType: Int,
-		private val startDate: Date,
+		val address: String,
+		val subscriptionType: Int,
+		val startDate: Date,
 		private val context: Context) {
 
 	private val frequency: Long
-	private var nextPickupDateNull: Date? = null
+
 	override fun toString(): String {
-		return "$name,$address,${frequency / daysToMillis},$startDate"
+		return "$name::$address::${frequency / daysToMillis}::${getAsString(startDate)}"
 	}
 
 	init {
@@ -26,7 +27,7 @@ class Customer(
 	}
 
 	companion object {
-		private val dateFormat = SimpleDateFormat("yyyy-mm-dd", Locale.US)
+		private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 		const val daysToMillis: Long = 86400000
 	}
 
@@ -38,7 +39,7 @@ class Customer(
 			context)
 
 	constructor(s: String, context: Context) : this(
-			s.split(","),
+			s.split("::"),
 			context)
 
 	val location: Point by lazy {
@@ -58,37 +59,22 @@ class Customer(
 		location.y
 	}
 
-	private fun getNextPickupDateInSequence(): Date {
-		val currentDate = Date()
-		var pickupDate = if (nextPickupDateNull != null) startDate else nextPickupDateNull as Date
-		return if (pickupDate.toInt() < currentDate.toInt()) {
-			do {
-				pickupDate = Date(pickupDate.time + frequency)
-			} while (pickupDate.toInt() < currentDate.toInt())
-			nextPickupDateNull = pickupDate
-			pickupDate
-		} else {
-			pickupDate = Date(pickupDate.time + frequency)
-			nextPickupDateNull = pickupDate
-			pickupDate
-		}
-	}
-
-	//Extending the Date class with a new function
-	fun Date.toInt(): Int = (this.year * 10000) + (this.month * 100) + this.day
-
-	fun Date.toString(): String {
-		return "${this.year}-${this.month}-${this.day}"
-	}
-
-	private fun resetPickupDateSequence() {
-		nextPickupDateNull = null
-	}
-
 	fun getNextNPickupDates(n: Int): ArrayList<Date> {
 		val dates = ArrayList<Date>()
-		repeat(n, { _ -> dates.add(getNextPickupDateInSequence()) })
-		resetPickupDateSequence()
+		val currentDate = Date()
+		var pickupDate = startDate
+
+		//Fast-forward the start date to the present date
+		while (getAsInt(pickupDate) < getAsInt(currentDate))
+			pickupDate = Date(pickupDate.time + frequency)
+		dates.add(pickupDate)
+
+		//We can now work forward n - 1 times
+		repeat(n - 1, {
+			pickupDate = Date(pickupDate.time + frequency)
+			dates.add(pickupDate)
+		})
+
 		return dates
 	}
 
