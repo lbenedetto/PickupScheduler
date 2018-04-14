@@ -19,7 +19,7 @@ class CustomerActivity : AppCompatActivity() {
 		setContentView(R.layout.activity_customer)
 		customerManager = CustomerManager(this)
 		listView = findViewById(R.id.listView)
-		adapter = CustomerListAdapter(customerManager.getAllCustomers())
+		adapter = CustomerListAdapter(customerManager)
 		listView.adapter = adapter
 
 		findViewById<Button>(R.id.buttonImport).setOnClickListener({
@@ -33,14 +33,13 @@ class CustomerActivity : AppCompatActivity() {
 			val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
 
 			dialogView.findViewById<Button>(R.id.buttonDone).setOnClickListener({
-				customerManager.addCustomer(Customer(
+				adapter.addCustomer(Customer(
 						name = dialogView.findViewById<EditText>(R.id.editTextName).text.toString(),
 						address = dialogView.findViewById<EditText>(R.id.editTextAddress).text.toString(),
 						subscriptionType = dialogView.findViewById<RadioGroup>(R.id.radioGroup).getSelectedFrequency(),
 						startDate = datePicker.getDate(),
-						context = this
-				))
-				adapter.notifyDataSetChanged()
+						context = this)
+				)
 				dialog.dismiss()
 			})
 

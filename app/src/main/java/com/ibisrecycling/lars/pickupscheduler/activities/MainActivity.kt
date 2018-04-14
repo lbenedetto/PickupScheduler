@@ -15,9 +15,11 @@ class MainActivity : AppCompatActivity() {
 	private lateinit var customerManager: CustomerManager
 	private lateinit var MOTD: TextView
 	private lateinit var calendar: CalendarPickerView
+
 	companion object {
 		val maxDate = Date((Date().time) + (62 * Customer.daysToMillis))
 	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -44,11 +46,20 @@ class MainActivity : AppCompatActivity() {
 
 			override fun onDateUnselected(date: Date?) {}
 		})
-		calendar.highlightDates(customerManager.getAllPickupDates(Date(), maxDate))
+		highlightDates()
 	}
 
 	private fun updateMOTD(date: Date) {
 		val size = customerManager.getCustomersOnDate(date).size
 		MOTD.text = getString(R.string.welcome_message, size, if (size != 1) "s" else "")
+	}
+
+	private fun highlightDates() {
+		calendar.highlightDates(customerManager.getAllPickupDates(Date(), maxDate))
+	}
+
+	override fun onRestart() {
+		super.onRestart()
+		highlightDates()
 	}
 }

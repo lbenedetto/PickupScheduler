@@ -8,11 +8,12 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
 import com.ibisrecycling.lars.pickupscheduler.utils.Customer
+import com.ibisrecycling.lars.pickupscheduler.utils.CustomerManager
 import com.ibisrecycling.lars.pickupscheduler.utils.DateConversions.Companion.getAsString
-import java.util.*
 
+class CustomerListAdapter(private val manager: CustomerManager) : BaseAdapter() {
+	private val a = manager.getAllCustomers()
 
-class CustomerListAdapter(val a: ArrayList<Customer>) : BaseAdapter() {
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 		val view =
 				if (convertView != null) {
@@ -31,10 +32,17 @@ class CustomerListAdapter(val a: ArrayList<Customer>) : BaseAdapter() {
 		})
 		view.findViewById<Button>(R.id.buttonDelete).setOnClickListener {
 			a.removeAt(position)
+			manager.saveCustomers(a)
 			notifyDataSetChanged()
 		}
 
 		return view
+	}
+
+	fun addCustomer(c: Customer) {
+		a.add(c)
+		manager.addCustomer(c)
+		notifyDataSetChanged()
 	}
 
 	private fun getTypeName(i: Int): String {

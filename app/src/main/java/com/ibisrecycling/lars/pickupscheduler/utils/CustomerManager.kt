@@ -7,10 +7,13 @@ import com.ibisrecycling.lars.pickupscheduler.utils.DateConversions.Companion.ge
 import java.util.*
 
 class CustomerManager(private val context: Context) {
-	private val key: String = "customers"
 	private val sharedPrefs: SharedPreferences = context.getSharedPreferences(key, MODE_PRIVATE)
-	private val allCustomers: ArrayList<Customer>? = null
-	private var updated: Boolean = false
+
+	companion object {
+		private const val key: String = "customers"
+		private var updated: Boolean = false
+		private var allCustomers: ArrayList<Customer>? = null
+	}
 
 	fun getAllCustomers(): ArrayList<Customer> {
 		if (updated || allCustomers == null) {
@@ -19,10 +22,11 @@ class CustomerManager(private val context: Context) {
 			customers.forEach({ customer ->
 				customerList.add(Customer(customer, context))
 			})
+			updated = false
+			allCustomers = customerList
 			return customerList
 		}
-		updated = false
-		return allCustomers
+		return allCustomers as ArrayList<Customer>
 	}
 
 	fun ArrayList<Customer>.allToString(): HashSet<String> {
@@ -37,29 +41,25 @@ class CustomerManager(private val context: Context) {
 		saveCustomers(customers.allToString())
 	}
 
-	fun saveCustomers(customers: HashSet<String>) {
-		sharedPrefs.edit()
-				.putStringSet(key, customers)
-				.apply()
+	private fun saveCustomers(customers: HashSet<String>) {
+		val editor = sharedPrefs.edit()
+		editor.clear()
+		editor.putStringSet(key, customers)
+		editor.apply()
 		updated = true
 	}
 
-	private fun removeAllCustomers() {
-		sharedPrefs.edit()
-				.putStringSet(key, null)
-				.apply()
-		updated = true
-	}
+//	private fun removeAllCustomers() {
+//		val editor = sharedPrefs.edit()
+//		editor.putStringSet(key, null)
+//		editor.apply()
+//		updated = true
+//	}
 
 	fun addCustomer(customer: Customer) {
-		addCustomer(customer.toString())
-	}
-
-	fun addCustomer(customer: String) {
 		val customers = sharedPrefs.getStringSet(key, HashSet<String>())
-		customers.add(customer)
+		customers.add(customer.toString())
 		saveCustomers(customers as HashSet<String>)
-		updated = true
 	}
 
 	val todaysCustomers: ArrayList<Customer>
