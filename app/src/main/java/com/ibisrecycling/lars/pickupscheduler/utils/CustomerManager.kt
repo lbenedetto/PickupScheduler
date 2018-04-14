@@ -62,8 +62,18 @@ class CustomerManager(private val context: Context) {
 	fun getCustomersOnDate(date: Date): ArrayList<Customer> {
 		val customers = ArrayList<Customer>()
 		getAllCustomers().forEach({ customer ->
-			if (customer.getNextNPickupDates(8).contains(date)) customers.add(customer)
+			if (customer.getNextNPickupDates(12).contains(date)) customers.add(customer)
 		})
 		return customers
+	}
+
+//	fun Date.toInt(): Int = (this.year * 10000) + (this.month * 100) + this.day
+
+	fun getAllPickupDates(): HashSet<Date> {
+		var dates = HashSet<Date>()
+		getAllCustomers().forEach({
+			dates.addAll(it.getNextNPickupDates(12))
+		})
+		return dates
 	}
 }

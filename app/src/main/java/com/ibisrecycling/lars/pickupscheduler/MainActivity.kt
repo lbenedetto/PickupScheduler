@@ -41,8 +41,7 @@ class MainActivity : AppCompatActivity() {
 
 			override fun onDateUnselected(date: Date?) {}
 		})
-		//TODO: Show which dates have customers on the calendar
-
+		calendar.highlightDates(customerManager.getAllPickupDates())
 	}
 
 	private fun updateMOTD(date: Date) {

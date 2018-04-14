@@ -8,25 +8,38 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class Customer(s: String, private val context: Context) {
-	val name: String
-	val address: String
-	private val frequency: Long //Time between pickups, in milliseconds
-	private val startDate: Date
+class Customer(
+		val name: String,
+		private val address: String,
+		subscriptionType: Int,
+		private val startDate: Date,
+		private val context: Context) {
+
+	private val frequency: Long
 	private var nextPickupDateNull: Date? = null
+	override fun toString(): String {
+		return "$name,$address,${frequency / daysToMillis},$startDate"
+	}
+
+	init {
+		frequency = subscriptionType * daysToMillis
+	}
 
 	companion object {
 		private val dateFormat = SimpleDateFormat("yyyy-mm-dd", Locale.US)
 		const val daysToMillis: Long = 86400000
 	}
 
-	init {
-		val data = s.split(",")
-		name = data[0]
-		address = data[1]
-		frequency = data[2].toLong() * daysToMillis
-		startDate = dateFormat.parse(data[3])
-	}
+	constructor(s: List<String>, context: Context) : this(
+			s[0],
+			s[1],//TODO: Addresses contain commas, deal with it
+			s[2].toInt(),
+			dateFormat.parse(s[3]),
+			context)
+
+	constructor(s: String, context: Context) : this(
+			s.split(","),
+			context)
 
 	val location: Point by lazy {
 		val address = Geocoder(context).getFromLocationName(address, 2)
@@ -62,7 +75,11 @@ class Customer(s: String, private val context: Context) {
 	}
 
 	//Extending the Date class with a new function
-	private fun Date.toInt(): Int = (this.year * 10000) + (this.month * 100) + this.day
+	fun Date.toInt(): Int = (this.year * 10000) + (this.month * 100) + this.day
+
+	fun Date.toString(): String {
+		return "${this.year}-${this.month}-${this.day}"
+	}
 
 	private fun resetPickupDateSequence() {
 		nextPickupDateNull = null
