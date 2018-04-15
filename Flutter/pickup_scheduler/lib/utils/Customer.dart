@@ -1,5 +1,6 @@
 import 'package:geocoder/geocoder.dart';
 import 'package:pickup_scheduler/utils/Date.dart';
+import 'dart:math';
 
 class Customer {
   String name;
@@ -8,6 +9,7 @@ class Customer {
   Date startDate;
   double x;
   double y;
+  Point point;
 
   Customer(String c) {
     var data = c.split('::');
@@ -23,6 +25,7 @@ class Customer {
     Coordinates coordinates = loc.first.coordinates;
     x = coordinates.latitude;
     y = coordinates.longitude;
+    point = new Point(x, y);
   }
 
   List<Date> getNextNPickupDates(int n) {
@@ -35,7 +38,6 @@ class Customer {
       pickupDate = pickupDate.add(offset);
     }
     dates.add(pickupDate);
-
     //We can now work forward n - 1 times
     for (int i = 1; i < n; i++) {
       pickupDate = pickupDate.add(offset);
@@ -46,13 +48,13 @@ class Customer {
   }
 
   List<Date> getAllPickupDates(Date min, Date max) {
-		List<Date> dates = getNextNPickupDates(8);
-		List<Date> filteredDates = new List<Date>();
+    List<Date> dates = getNextNPickupDates(8);
+    List<Date> filteredDates = new List<Date>();
 
-		for(Date d in dates){
-			if(d >= min && d <= max) filteredDates.add(d);
-		}
+    for (Date d in dates) {
+      if (d >= min && d <= max) filteredDates.add(d);
+    }
 
-		return filteredDates;
+    return filteredDates;
   }
 }
