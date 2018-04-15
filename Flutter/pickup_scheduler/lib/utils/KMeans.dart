@@ -66,7 +66,7 @@ class KMeans {
   }
 
   int getIndexOfNearestCentroid(Customer customer, List<Point> centroids) {
-    double min = 999999.0;
+    double min = 9999999.0;
     int ix = 0;
     double dist;
 
