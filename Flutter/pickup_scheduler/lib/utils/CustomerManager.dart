@@ -27,7 +27,7 @@ class CustomerManager {
   List<Customer> getCustomersOnDate(Date date) {
     List<Customer> newCustomers = new List<Customer>();
     for (Customer c in customers) {
-      if (c.startDate == date) newCustomers.add(c);
+      if (c.getAllPickupDates(date, date).contains(date)) newCustomers.add(c);
     }
     return newCustomers;
   }

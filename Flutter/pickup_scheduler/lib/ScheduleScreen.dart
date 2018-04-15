@@ -12,22 +12,22 @@ class ScheduleScreen extends StatefulWidget {
   State createState() {
     final DateTime now = new DateTime.now();
     final Date initialDate = new Date(now.year, now.month, 1);
-    final List<DateTime> pickups = manager.getAllPickupDates(initialDate, new Date(now.year, now.month, 31));
-    return new _ScheduleScreenState(pickups, initialDate.asDateTime());
+    final List<DateTime> pickups = manager.getAllPickupDates(initialDate, new Date(now.year, now.month+1, 31));
+    return new _ScheduleScreenState(manager, pickups, initialDate.asDateTime());
   }
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  _ScheduleScreenState(this.pickups, this.initialDate) : super();
+  _ScheduleScreenState(this.manager, this.pickups, this.initialDate) : super();
   final List<DateTime> pickups;
   final DateTime initialDate;
   final DateTime now = new DateTime.now();
+  final CustomerManager manager;
   bool showWeekdayIndication = true;
   bool showTicks = true;
   String displayedMonthText = "____";
   Widget smallCalendar;
   SmallCalendarController smallCalendarController;
-  DateTime selected;
   @override
   void initState() {
     super.initState();
@@ -49,7 +49,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     Future<bool> hasTick3Callback(DateTime day) async => _containsN(pickups, day) >= 3;
 
     return new SmallCalendarController(
-      isSelectedCallback: (DateTime day) async => day == selected,
+      isSelectedCallback: (DateTime day) async => false,
       hasTick1Callback: hasTick1Callback,
       hasTick2Callback: hasTick2Callback,
       hasTick3Callback: hasTick3Callback,
@@ -67,15 +67,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         tick1Color: Colors.green,
         tick2Color: Colors.yellow[700],
         tick3Color: Colors.red[700],
-        selectedColor: Colors.deepPurple,
-          todayColor: Colors.pink
+	      todayColor: Colors.deepPurple,
       ),
       showWeekdayIndication: showWeekdayIndication,
       weekdayIndicationStyle: new WeekdayIndicationStyleData(backgroundColor: Colors.red[700]),
       weekdayIndicationHeight: 60.0,
       onDayPressed: (DateTime date) {
-          selected = date;
-          //TODO show number of customers in text
+	      Scaffold.of(context).showSnackBar(new SnackBar(
+		      content: new Text(_getDayString(date)),
+	      ));
       },
       onDisplayedMonthChanged: (int year, int month) {
         setState(() {
@@ -85,6 +85,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       },
     );
   }
+
+	String _getDayString(DateTime date){
+  	Date d = new Date.fromDateTime(date);
+  	int size = manager.getCustomersOnDate(d).length;
+  	return "We have $size customer${size == 1 ? "" : "s"} on ${d.asString()}";
+	}
 
   @override
   Widget build(BuildContext context) {
