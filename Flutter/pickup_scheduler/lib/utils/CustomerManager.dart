@@ -8,10 +8,12 @@ class CustomerManager {
 
   CustomerManager() {
     _parseCustomers();
+//    customers.add(new Customer("Carol::705 Golden Hills Drive, Cheney WA, 99004::7::2018::4::18"));
+//    customers.add(new Customer("Chris::1012 Moyer St::14::2018::4::17"));
   }
 
   void _parseCustomers() async {
-    String file = await rootBundle.loadString("/assets/customers.txt");
+    String file = await rootBundle.loadString("assets/customers.txt");
     List<String> data = file.split("\n");
     for (String line in data) {
       customers.add(new Customer(line));
@@ -19,7 +21,7 @@ class CustomerManager {
   }
 
   List<Customer> getTodaysCustomers() {
-    return getCustomersOnDate(new Date.fromNow(new DateTime.now()));
+    return getCustomersOnDate(new Date.fromDateTime(new DateTime.now()));
   }
 
   List<Customer> getCustomersOnDate(Date date) {

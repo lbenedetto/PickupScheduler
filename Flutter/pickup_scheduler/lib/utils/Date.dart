@@ -1,10 +1,16 @@
 class Date extends DateTime {
+  static const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
   Date(int year, int month, int day) : super(year, month, day);
 
-  Date.fromNow(DateTime d) : super(d.year, d.month, d.day);
+  Date.fromDateTime(DateTime d) : super(d.year, d.month, d.day);
 
   int asInt() {
     return (this.year * 10000) + (this.month * 100) + this.day;
+  }
+
+  String asString() {
+    return "${months[this.month - 1]} ${this.day}";
   }
 
   operator ==(other) {

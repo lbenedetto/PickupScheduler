@@ -22,15 +22,22 @@ class Customer {
 
   calculateCoordinates() async {
     var loc = await Geocoder.local.findAddressesFromQuery(address);
-    Coordinates coordinates = loc.first.coordinates;
-    x = coordinates.latitude;
-    y = coordinates.longitude;
+    if (loc.length >= 1) {
+      Coordinates coordinates = loc.first.coordinates;
+      x = coordinates.latitude;
+      y = coordinates.longitude;
+      print("resolved to $x, $y");
+    }else{
+      x = 47.4874;
+      y = 117.5758;
+      print("Could not resolve address to coordinates");
+    }
     point = new Point(x, y);
   }
 
   List<Date> getNextNPickupDates(int n) {
-    List<Date> dates = new List<DateTime>();
-    Date currentDate = new Date.fromNow(new DateTime.now());
+    List<Date> dates = new List<Date>();
+    Date currentDate = new Date.fromDateTime(new DateTime.now());
     Date pickupDate = startDate;
 
     //Fast-forward the start date to the present date
