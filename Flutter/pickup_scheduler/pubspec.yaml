@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^0.1.0
   shared_preferences: "^0.4.1"
   geocoder: "^0.0.1"
+  small_calendar: "^0.3.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter

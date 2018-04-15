@@ -5,28 +5,44 @@ import 'package:pickup_scheduler/ScheduleScreen.dart';
 import 'package:pickup_scheduler/utils/CustomerManager.dart';
 
 void main() {
-	runApp(new MyApp(manager: new CustomerManager()));
+  runApp(new MyApp(manager: new CustomerManager()));
 }
 
 class MyApp extends StatelessWidget {
-	MyApp({Key key, this.manager}) : super(key: key);
+  MyApp({Key key, this.manager}) : super(key: key);
 
-	final CustomerManager manager;
+  final CustomerManager manager;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Pickup Scheduler',
       theme: new ThemeData(
         primaryColor: Colors.red,
         brightness: Brightness.dark,
       ),
-      home: new ScheduleScreen(),
-	    routes: <String, WidgetBuilder>{
-      	'/customers': (BuildContext context) => new CustomerScreen(customers: manager.customers),
-		    '/pickups' : (BuildContext context) => new PickupsScreen(),
-		    '/schedule' : (BuildContext context) => new ScheduleScreen(),
-	    },
+      home: new DefaultTabController(
+        length: 3,
+        child: new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Ibis Recycling Driver App"),
+            bottom: new TabBar(
+              tabs: <Widget>[
+                new Tab(icon: new Icon(Icons.calendar_today), text: "Schedule"),
+                new Tab(icon: new Icon(Icons.account_circle), text: "Customers"),
+                new Tab(icon: new Icon(Icons.navigation), text: "Route"),
+              ],
+            ),
+          ),
+          body: new TabBarView(
+            children: <Widget>[
+              new ScheduleScreen(customers: manager.customers),
+              new CustomerScreen(customers: manager.customers),
+              new PickupsScreen()
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

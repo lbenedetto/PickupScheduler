@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:small_calendar/small_calendar.dart';
+import 'utils/Customer.dart';
 
-//https://github.com/ZedTheLed/small_calendar
 class ScheduleScreen extends StatelessWidget {
-	@override
-	Widget build(BuildContext context){
-		return new Scaffold(
-			appBar: new AppBar(
-				title: new Text('Schedule'),
-			),
-			body: new Center(
-				child: new RaisedButton(
-					child: new Text('View Customers'),
-					onPressed: () => Navigator.of(context).pushNamed('/customers'),
-				),
-			),
-		);
-	}
+  ScheduleScreen({Key key, this.customers}) : super(key: key);
+  final List<Customer> customers;
+
+  @override
+  Widget build(BuildContext context) {
+    final DateTime now = new DateTime.now();
+    final smallCalendar = new SmallCalendar(
+      initialDate: new DateTime(now.year, now.month, 1),
+      firstWeekday: DateTime.sunday,
+    );
+
+    return new Scaffold(
+      body: new Container(
+        padding: const EdgeInsets.all(16.0),
+        child: new Column(
+          children: <Widget>[
+            smallCalendar,
+            new Text("We have 0 customers today"), //TODO: Dynamic update for selected date
+          ],
+        ),
+      ),
+    );
+  }
 }
