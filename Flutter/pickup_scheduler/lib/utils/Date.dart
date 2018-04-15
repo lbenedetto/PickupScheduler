@@ -13,6 +13,8 @@ class Date extends DateTime {
     return "${months[this.month - 1]} ${this.day}";
   }
 
+  String monthString() => months[this.month - 1];
+
   operator ==(other) {
     if (other is Date) {
       return this.asInt() == other.asInt();
@@ -41,7 +43,11 @@ class Date extends DateTime {
 
   int get hashCode => asInt();
 
-  DateTime getAsDateTime() {
+  DateTime asDateTime() {
     return new DateTime(this.year, this.month, this.day);
+  }
+
+  Date increment(Duration offset){
+  	return new Date.fromDateTime(this.add(offset));
   }
 }

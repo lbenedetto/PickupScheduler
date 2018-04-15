@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           ),
           body: new TabBarView(
             children: <Widget>[
-              new ScheduleScreen(customers: manager.customers),
+              new ScheduleScreen(manager: manager),
               new CustomerScreen(customers: manager.customers),
               new PickupsScreen()
             ],

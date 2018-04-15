@@ -42,12 +42,12 @@ class Customer {
 
     //Fast-forward the start date to the present date
     while (pickupDate < currentDate) {
-      pickupDate = pickupDate.add(offset);
+      pickupDate = pickupDate.increment(offset);
     }
     dates.add(pickupDate);
     //We can now work forward n - 1 times
     for (int i = 1; i < n; i++) {
-      pickupDate = pickupDate.add(offset);
+      pickupDate = pickupDate.increment(offset);
       dates.add(pickupDate);
     }
 
