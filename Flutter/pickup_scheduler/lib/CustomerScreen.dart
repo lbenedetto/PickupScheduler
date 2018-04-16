@@ -24,8 +24,9 @@ class CustomerScreen extends StatelessWidget {
 	}
 
 	Widget _buildRow(Customer customer){
-		final Date nextPickup = customer.getNextNPickupDates(1)[0];
-		final isToday =  nextPickup == new Date.fromDateTime(new DateTime.now());
+		final Date now = new Date.fromDateTime(new DateTime.now());
+		final Date nextPickup = customer.getNextNPickupDates(1, now)[0];
+		final isToday =  nextPickup == now;
 		return new Container(
 			padding: const EdgeInsets.all(16.0),
 			child: new Row(

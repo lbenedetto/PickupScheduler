@@ -27,7 +27,7 @@ class Customer {
       x = coordinates.latitude;
       y = coordinates.longitude;
       print("resolved to $x, $y");
-    }else{
+    } else {
       x = 47.4874;
       y = 117.5758;
       print("Could not resolve address to coordinates");
@@ -35,18 +35,24 @@ class Customer {
     point = new Point(x, y);
   }
 
-  List<Date> getNextNPickupDates(int n) {
+  List<Date> getNextNPickupDates(int n, Date min) {
     List<Date> dates = new List<Date>();
     Date currentDate = new Date.fromDateTime(new DateTime.now());
     Date pickupDate = startDate;
+    //Fast-forward to minimum date
+    while (pickupDate < min) {
+      pickupDate = pickupDate.increment(offset);
+    }
 
-    //Fast-forward the start date to the present date
+    //Add in all the pickup dates between min and today
     while (pickupDate < currentDate) {
+      dates.add(pickupDate);
       pickupDate = pickupDate.increment(offset);
     }
     dates.add(pickupDate);
-    //We can now work forward n - 1 times
-    for (int i = 1; i < n; i++) {
+
+    //We can now work forward n
+    for (int i = 0; i < n; i++) {
       pickupDate = pickupDate.increment(offset);
       dates.add(pickupDate);
     }
@@ -55,7 +61,7 @@ class Customer {
   }
 
   List<Date> getAllPickupDates(Date min, Date max) {
-    List<Date> dates = getNextNPickupDates(8);
+    List<Date> dates = getNextNPickupDates(8, min);
     List<Date> filteredDates = new List<Date>();
 
     for (Date d in dates) {

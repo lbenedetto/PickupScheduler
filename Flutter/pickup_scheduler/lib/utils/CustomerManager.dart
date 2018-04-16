@@ -44,4 +44,16 @@ class CustomerManager {
     }
     return convertedDates;
   }
+
+  List<DateTime> getAllPickupDatesRaw(Date min, Date max){
+    List<Date> dates = new List<Date>();
+    for (Customer c in customers) {
+      dates.addAll(c.getAllPickupDates(min, max));
+    }
+    List<DateTime> convertedDates = new List<DateTime>();
+    for (Date d in dates) {
+      convertedDates.add(d.asDateTime());
+    }
+    return convertedDates;
+  }
 }

@@ -37,7 +37,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   SmallCalendarController createSmallCalendarController() {
     int _containsN(DateTime day) {
     	if(pickups == null)
-    		pickups = manager.getAllPickupDates(new Date(now.year, now.month, 1), new Date(now.year, now.month+1, 31));
+    		pickups = manager.getAllPickupDatesRaw(new Date(now.year, now.month, 1), new Date(now.year, now.month+1, 31));
       int count = 0;
       for (DateTime d in pickups) {
         if (d == day) count++;

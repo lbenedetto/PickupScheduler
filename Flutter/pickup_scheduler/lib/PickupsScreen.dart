@@ -135,6 +135,7 @@ class LabeledIcon extends StatelessWidget {
       double lng = result["longitude"];
       //This should work as long as there are less than 23 customers in the group
       String mapsURL = "https://www.google.com/maps/dir/$lat,$lng/";
+      //TODO: Use some sort of travelling salesman solver to sort these addresses
       for (Customer c in group) {
         mapsURL += "${c.x},${c.y}/";
       }
