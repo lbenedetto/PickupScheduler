@@ -12,6 +12,7 @@ dependencies:
   geocoder: "^0.0.1"
   small_calendar: "^0.3.0"
   url_launcher: "^3.0.0"
+  location: "^1.2.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter

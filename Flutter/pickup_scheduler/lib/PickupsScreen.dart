@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'utils/CustomerManager.dart';
 import 'utils/Customer.dart';
-import 'utils/Date.dart';
 import 'utils/KMeans.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:location/location.dart';
 
 class PickupsScreen extends StatelessWidget {
   PickupsScreen({Key key, this.manager}) : super(key: key);
@@ -11,7 +11,7 @@ class PickupsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    KMeans kmeans = new KMeans(manager.customers);
+    KMeans kmeans = new KMeans(manager.getTodaysCustomers());
     List<List<Customer>> groups = kmeans.generateGroups();
 
     return new Scaffold(
@@ -68,6 +68,7 @@ class PickupsScreen extends StatelessWidget {
               new LabeledIcon(
                 icon: Icons.near_me,
                 label: "Route",
+                group: group,
               )
             ],
           ),
@@ -102,9 +103,7 @@ class _CheckBoxState extends State<CheckBox> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         new IconButton(
-          icon: (_isChecked
-          ? new Icon(Icons.check_box)
-          : new Icon(Icons.check_box_outline_blank)),
+          icon: (_isChecked ? new Icon(Icons.check_box) : new Icon(Icons.check_box_outline_blank)),
           color: Colors.red[500],
           onPressed: _toggleChecked,
         ),
@@ -124,12 +123,25 @@ class _CheckBoxState extends State<CheckBox> {
 }
 
 class LabeledIcon extends StatelessWidget {
-  LabeledIcon({Key key, this.icon, this.label}) : super(key: key);
+  LabeledIcon({Key key, this.icon, this.label, this.group}) : super(key: key);
   final IconData icon;
   final String label;
+  final List<Customer> group;
 
-  void _navigate() {
+  void _navigate() async {
+    Location _location = new Location();
+    _location.getLocation.then((result) {
+      double lat = result["latitude"];
+      double lng = result["longitude"];
+      //This should work as long as there are less than 23 customers in the group
+      String mapsURL = "https://www.google.com/maps/dir/$lat,$lng/";
+      for (Customer c in group) {
+        mapsURL += "${c.x},${c.y}/";
+      }
+      mapsURL += "47.492921,-117.564710"; //Cheney Recycling center
 
+      launch(mapsURL, forceSafariVC: false, forceWebView: false);
+    });
   }
 
   @override
@@ -140,11 +152,11 @@ class LabeledIcon extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-	      new IconButton(
-		      icon: new Icon(Icons.near_me),
-		      color: Colors.red[500],
-		      onPressed: _navigate,
-	      ),
+        new IconButton(
+          icon: new Icon(Icons.near_me),
+          color: Colors.red[500],
+          onPressed: _navigate,
+        ),
         new Container(
           child: new Text(
             label,
