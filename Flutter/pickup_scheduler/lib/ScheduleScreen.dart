@@ -12,14 +12,13 @@ class ScheduleScreen extends StatefulWidget {
   State createState() {
     final DateTime now = new DateTime.now();
     final Date initialDate = new Date(now.year, now.month, 1);
-    final List<DateTime> pickups = manager.getAllPickupDates(initialDate, new Date(now.year, now.month+1, 31));
-    return new _ScheduleScreenState(manager, pickups, initialDate.asDateTime());
+    return new _ScheduleScreenState(manager, initialDate.asDateTime());
   }
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  _ScheduleScreenState(this.manager, this.pickups, this.initialDate) : super();
-  final List<DateTime> pickups;
+  _ScheduleScreenState(this.manager, this.initialDate) : super();
+  List<DateTime> pickups;
   final DateTime initialDate;
   final DateTime now = new DateTime.now();
   final CustomerManager manager;
@@ -36,17 +35,19 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   SmallCalendarController createSmallCalendarController() {
-    int _containsN(List<DateTime> list, DateTime day) {
+    int _containsN(DateTime day) {
+    	if(pickups == null)
+    		pickups = manager.getAllPickupDates(new Date.fromDateTime(initialDate), new Date(now.year, now.month+1, 31));
       int count = 0;
-      for (DateTime d in list) {
+      for (DateTime d in pickups) {
         if (d == day) count++;
       }
       return count;
     }
 
-    Future<bool> hasTick1Callback(DateTime day) async => _containsN(pickups, day) >= 1;
-    Future<bool> hasTick2Callback(DateTime day) async => _containsN(pickups, day) >= 2;
-    Future<bool> hasTick3Callback(DateTime day) async => _containsN(pickups, day) >= 3;
+    Future<bool> hasTick1Callback(DateTime day) async => _containsN(day) >= 1;
+    Future<bool> hasTick2Callback(DateTime day) async => _containsN(day) >= 2;
+    Future<bool> hasTick3Callback(DateTime day) async => _containsN(day) >= 3;
 
     return new SmallCalendarController(
       isSelectedCallback: (DateTime day) async => false,

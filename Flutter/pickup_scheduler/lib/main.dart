@@ -5,15 +5,16 @@ import 'package:pickup_scheduler/ScheduleScreen.dart';
 import 'package:pickup_scheduler/utils/CustomerManager.dart';
 
 void main() {
-  runApp(new MyApp(manager: new CustomerManager()));
+	CustomerManager manager = new CustomerManager();
+	manager.parseCustomers().then((result) {
+		runApp(new MyApp(manager: manager));
+	});
 }
 
 class MyApp extends StatelessWidget {
   MyApp({Key key, this.manager}) : super(key: key);
-
   final CustomerManager manager;
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
