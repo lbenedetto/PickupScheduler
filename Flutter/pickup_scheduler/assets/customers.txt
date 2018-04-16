@@ -1,2 +1,3 @@
 Carol::705 Golden Hills Drive, Cheney WA, 99004::7::2018::4::18
-Chris::1012 Moyer St::14::2018::04::17
+Chris::1012 Moyer St, Cheney WA, 99004::14::2018::04::17
+Lars::706 Golden Hills Drive, Cheney WA, 99004::7::2018::4::15

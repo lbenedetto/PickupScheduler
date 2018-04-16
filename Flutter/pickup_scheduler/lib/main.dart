@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
               tabs: <Widget>[
                 new Tab(icon: new Icon(Icons.calendar_today), text: "Schedule"),
                 new Tab(icon: new Icon(Icons.account_circle), text: "Customers"),
-                new Tab(icon: new Icon(Icons.navigation), text: "Route"),
+                new Tab(icon: new Icon(Icons.near_me), text: "Route Planner"),
               ],
             ),
           ),
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               new ScheduleScreen(manager: manager),
               new CustomerScreen(customers: manager.customers),
-              new PickupsScreen()
+              new PickupsScreen(manager: manager)
             ],
           ),
         ),

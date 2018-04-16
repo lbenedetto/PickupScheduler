@@ -24,12 +24,15 @@ class KMeans {
     int k = (customers.length / GROUP_SIZE).ceil(); //Target number of groups
     BoundingBox box = new BoundingBox(customers); //The bounding box surrounding all the customers
     List<Point> oldCentroids = new List<Point>(k); //List of previous centroids to check if we're making progress
-    List<List<Customer>> clusters = new List<List<Customer>>(); //List of generated clusters so far
+    List<List<Customer>> clusters = new List<List<Customer>>(k); //List of generated clusters so far
     Function deepEq = const DeepCollectionEquality().equals;
 
-    //Initialize the centroids to random points
+    //Initialize the centroids to random points, and fill clusters array with empty lists
     List<Point> centroids = new List<Point>(k);
-    for (int i = 0; i < k; i++) centroids.add(box.getRandomPointInBounds());
+    for (int i = 0; i < k; i++) {
+      centroids[i] = box.getRandomPointInBounds();
+      clusters[i] = new List<Customer>();
+    }
 
     //Begin the algorithm
     while ((iterations < MAX_ITERATIONS) && !(deepEq(oldCentroids, centroids))) {
@@ -38,7 +41,9 @@ class KMeans {
 
       //Each customer joins a cluster based on their nearest centroid
       for (int i = 0; i < customers.length; i++) {
-        clusters[getIndexOfNearestCentroid(customers[i], centroids)].add(customers[i]);
+        int nearestIX = getIndexOfNearestCentroid(customers[i], centroids);
+        Customer c = customers[i];
+        clusters[nearestIX].add(c);
       }
 
       //Move the centroids to the geometric mean of their cluster

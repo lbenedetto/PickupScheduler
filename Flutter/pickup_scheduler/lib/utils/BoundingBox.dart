@@ -21,24 +21,11 @@ class BoundingBox {
     }
   }
 
-  bool _isOutOfBoundsX(double x) {
-    return x > maxX || x < minX;
-  }
-
-  bool _isOutOfBoundsY(double y) {
-    return y > maxY || y < minY;
-  }
-
   Point getRandomPointInBounds() {
-    double x;
-    double y;
     var rng = new Random();
-    do {
-      x = rng.nextDouble();
-    } while (_isOutOfBoundsX(x));
-    do {
-      x = rng.nextDouble();
-    } while (_isOutOfBoundsY(y));
+    //Interpolate randomly between min and max
+    double x = ((rng.nextDouble()) * (minX - maxX) + minX);
+    double y = ((rng.nextDouble()) * (minY - maxY) + minY);
     return new Point(x, y);
   }
 }
