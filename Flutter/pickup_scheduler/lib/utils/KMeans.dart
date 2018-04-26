@@ -1,7 +1,8 @@
-import 'package:pickup_scheduler/utils/Customer.dart';
-import 'package:pickup_scheduler/utils/BoundingBox.dart';
-import 'package:collection/collection.dart';
 import 'dart:math';
+
+import 'package:collection/collection.dart';
+import 'package:pickup_scheduler/utils/BoundingBox.dart';
+import 'package:pickup_scheduler/utils/Customer.dart';
 
 class KMeans {
   static const int GROUP_SIZE = 4; //TODO: Make this configurable
@@ -22,6 +23,7 @@ class KMeans {
   List<List<Customer>> generateGroups() {
     int iterations = 0;
     int k = (customers.length / GROUP_SIZE).ceil(); //Target number of groups
+    if (k == 0) return List();
     BoundingBox box = new BoundingBox(customers); //The bounding box surrounding all the customers
     List<Point> oldCentroids = new List<Point>(k); //List of previous centroids to check if we're making progress
     List<List<Customer>> clusters = new List<List<Customer>>(k); //List of generated clusters so far
