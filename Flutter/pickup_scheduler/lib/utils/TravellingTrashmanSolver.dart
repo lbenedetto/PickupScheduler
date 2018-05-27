@@ -14,7 +14,8 @@ class TravellingTrashmanSolver {
     }
     locations += "|${end.x},${end.y}";
     distanceMatrix += "?origins=" + locations;
-    distanceMatrix += "?destinations=" + locations;
+    distanceMatrix += "&destinations=" + locations;
+    distanceMatrix += "&key=AIzaSyBNV_OcRZ6Esm8-w58FAOi5y9w57XFodxY";
     return distanceMatrix;
   }
 
@@ -31,9 +32,10 @@ class TravellingTrashmanSolver {
 
     List<List<Node>> matrix = new List<List<Node>>();
 
-    for (int from = 0; from < group.length; from++) {
-      for (int to = 0; to < group.length; to++) {
-        matrix[from][to] = new Node(points[to].x, points[to].y, responseJson["rows"][from]["elements"][to]["duration"]["value"]);
+    for (int from = 0; from < points.length; from++) {
+      matrix.add(new List<Node>());
+      for (int to = 0; to < points.length; to++) {
+        matrix[from].add(new Node(points[to].x, points[to].y, responseJson["rows"][from]["elements"][to]["duration"]["value"]));
       }
     }
     Path startPath = new Path();
@@ -49,9 +51,10 @@ class TravellingTrashmanSolver {
   }
 
   static Path getOptimalPath(List<List<Node>> matrix, int from, Path p) {
+    if(from == matrix[0].length - 1) return p;
     List<Path> paths = new List<Path>();
     List<Node> nodes = matrix[from];
-    for (int to = 0; to < nodes.length; to++) {
+    for (int to = 1; to < nodes.length; to++) {
       if (p.visitedNodes.contains(to)) continue; //Already visited this node
       if (to == nodes.length - 1 && p.length != nodes.length - 1) continue; //Not yet ready to visit end node
       Path path = p.duplicate();
@@ -84,6 +87,7 @@ class Path {
 
   Path() {
     path = new List<Node>();
+    visitedNodes = new List<int>();
     time = 0;
     length = 0;
   }
@@ -95,7 +99,7 @@ class Path {
     visitedNodes.add(ix);
   }
 
-  duplicate() {
+  Path duplicate() {
     Path newPath = new Path();
     for (Node n in path) {
       newPath.add(n, 0);
@@ -105,5 +109,6 @@ class Path {
       newPath.visitedNodes.add(i);
     }
     newPath.time = time;
+    return newPath;
   }
 }
