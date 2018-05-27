@@ -1,5 +1,6 @@
-import 'package:pickup_scheduler/utils/Customer.dart';
 import 'dart:math';
+
+import 'package:pickup_scheduler/utils/Customer.dart';
 
 class BoundingBox {
   double minX;
@@ -24,8 +25,8 @@ class BoundingBox {
   Point getRandomPointInBounds() {
     var rng = new Random();
     //Interpolate randomly between min and max
-    double x = ((rng.nextDouble()) * (minX - maxX) + minX);
-    double y = ((rng.nextDouble()) * (minY - maxY) + minY);
+    double x = ((rng.nextDouble() * (maxX - minX)) + minX);
+    double y = ((rng.nextDouble() * (maxY - minY)) + minY);
     return new Point(x, y);
   }
 }

@@ -133,16 +133,11 @@ class LabeledIcon extends StatelessWidget {
   final List<Customer> group;
 
   void _navigate() async {
-    Location _location = new Location();
-    _location.getLocation.then((result) {
-      double lat = result["latitude"];
-      double lng = result["longitude"];
-      Point start = new Point(lat, lng); //Current Location
-      Point end = new Point(47.492921, -117.564710); //Cheney Recycling center
-      TravellingTrashmanSolver.getOptimalRoute(start, group, end).then((route) {
-        launch(route, forceSafariVC: false, forceWebView: false);
-      });
-    });
+    Map<String, double> location = await new Location().getLocation;
+    Point start = new Point(location["latitude"], location["longitude"]); //Current Location
+    Point end = new Point(47.492921, -117.564710); //Cheney Recycling center
+    String route = await TravellingTrashmanSolver.getOptimalRoute(start, group, end);
+    launch(route, forceSafariVC: false, forceWebView: false);
   }
 
   @override

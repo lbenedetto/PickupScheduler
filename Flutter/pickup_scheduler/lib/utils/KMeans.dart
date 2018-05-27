@@ -38,8 +38,13 @@ class KMeans {
 
     //Begin the algorithm
     while ((iterations < MAX_ITERATIONS) && !(deepEq(oldCentroids, centroids))) {
-      oldCentroids = centroids;
+      oldCentroids = copy(centroids);
       iterations++;
+
+      //Reset clusters
+      for (int i = 0; i < k; i++) {
+        clusters[i] = new List<Customer>();
+      }
 
       //Each customer joins a cluster based on their nearest centroid
       for (int i = 0; i < customers.length; i++) {
@@ -61,6 +66,14 @@ class KMeans {
     return clusters;
   }
 
+  List<Point> copy(List<Point> old) {
+    List<Point> newPoints = new List<Point>();
+    for (Point p in old) {
+      newPoints.add(p);
+    }
+    return newPoints;
+  }
+
   Point _geometricMean(List<Customer> customers) {
     double productX = 1.0;
     double productY = 1.0;
@@ -69,7 +82,9 @@ class KMeans {
       productX *= c.x;
       productY *= c.y;
     }
-    return new Point(pow(productX, n), pow(productY, n));
+    //This code only works if you are not near any meridians, and your longitude is a negative value
+    //TODO: Maybe generalize this code somehow?
+    return new Point(pow(productX, n), 0 - pow(productY, n));
   }
 
   int getIndexOfNearestCentroid(Customer customer, List<Point> centroids) {
