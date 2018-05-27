@@ -9,7 +9,7 @@ class CustomerManager {
 
   CustomerManager() {
 //    customers.add(new Customer("Carol::705 Golden Hills Drive, Cheney WA, 99004::7::2018::4::18"));
-//    customers.add(new Customer("Chris::1012 Moyer St::14::2018::4::17"));
+//    customers.add(new Customer("Chris::1012 Moyer St::7::2018::4::17"));
   }
 
   Future<List<Customer>> parseCustomers() async {

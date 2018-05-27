@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'utils/CustomerManager.dart';
-import 'utils/Customer.dart';
-import 'utils/KMeans.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'utils/Customer.dart';
+import 'utils/CustomerManager.dart';
+import 'utils/KMeans.dart';
+import 'utils/TravellingTrashmanSolver.dart';
 
 class PickupsScreen extends StatelessWidget {
   PickupsScreen({Key key, this.manager}) : super(key: key);
@@ -133,15 +137,11 @@ class LabeledIcon extends StatelessWidget {
     _location.getLocation.then((result) {
       double lat = result["latitude"];
       double lng = result["longitude"];
-      //This should work as long as there are less than 23 customers in the group
-      String mapsURL = "https://www.google.com/maps/dir/$lat,$lng/";
-      //TODO: Use some sort of travelling salesman solver to sort these addresses
-      for (Customer c in group) {
-        mapsURL += "${c.x},${c.y}/";
-      }
-      mapsURL += "47.492921,-117.564710"; //Cheney Recycling center
-
-      launch(mapsURL, forceSafariVC: false, forceWebView: false);
+      Point start = new Point(lat, lng); //Current Location
+      Point end = new Point(47.492921, -117.564710); //Cheney Recycling center
+      TravellingTrashmanSolver.getOptimalRoute(start, group, end).then((route) {
+        launch(route, forceSafariVC: false, forceWebView: false);
+      });
     });
   }
 

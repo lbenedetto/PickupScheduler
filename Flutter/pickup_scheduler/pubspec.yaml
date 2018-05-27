@@ -13,6 +13,7 @@ dependencies:
   small_calendar: "^0.3.0"
   url_launcher: "^3.0.0"
   location: "^1.2.0"
+  http: "^0.11.3+16"
 dev_dependencies:
   flutter_test:
     sdk: flutter
