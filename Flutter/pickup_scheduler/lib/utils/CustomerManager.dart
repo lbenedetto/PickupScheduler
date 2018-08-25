@@ -21,8 +21,15 @@ class CustomerManager {
     return customers;
   }
 
-  List<Customer> getTodaysCustomers() {
-    return getCustomersOnDate(new Date.fromDateTime(new DateTime.now()));
+  List<Customer> getNextPickupsCustomers() {
+    Date date = new Date.fromDateTime(new DateTime.now());
+    List<Customer> customers = getCustomersOnDate(date);
+    while(customers.length == 0){
+      date = new Date.fromDateTime(date.add(new Duration(days: 1)));
+      customers = getCustomersOnDate(date);
+    }
+
+    return customers;
   }
 
   List<Customer> getCustomersOnDate(Date date) {

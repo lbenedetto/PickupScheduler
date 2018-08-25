@@ -15,7 +15,7 @@ class PickupsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    KMeans kmeans = new KMeans(manager.getTodaysCustomers());
+    KMeans kmeans = new KMeans(manager.getNextPickupsCustomers());
     List<List<Customer>> groups = kmeans.generateGroups();
 
     return new Scaffold(

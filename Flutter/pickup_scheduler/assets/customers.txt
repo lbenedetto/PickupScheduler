@@ -1,3 +1,4 @@
-Carol::705 Golden Hills Drive, Cheney WA, 99004::7::2018::4::4
-Chris::1012 Moyer St, Cheney WA, 99004::7::2018::05::16
-Carl::741 Osprey Drive, Cheney WA, 99004::7::2018::05::02
+Carol::705 Golden Hills Drive, Cheney WA, 99004::7::2018::05::02
+Chris::1012 Moyer St, Cheney WA, 99004::7::2018::05::02
+James::15916 S Normal Park Rd, Cheney WA, 99004::7::2018::05::02
+Frank::626 Marcella Avenue, Cheney WA, 99004::7::2018::05::02
